@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/img">
+        <file>image/icon.png</file>
+        <file>image/登录页标题图.jpg</file>
+    </qresource>
+</RCC>
