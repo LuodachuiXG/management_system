@@ -25,10 +25,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mainwidget.cpp
+        mainwidget.cpp \
+    mysqlite.cpp
 
 HEADERS += \
-        mainwidget.h
+        mainwidget.h \
+    mysqlite.h
 
 FORMS += \
         mainwidget.ui
