@@ -1,10 +1,28 @@
-QTextEdit,QLineEdit {
+#MainWidget {
+    background-color: white;
+}
+.QTextEdit,.QLineEdit {
     border: 1px solid #909399;
-    border-radius: 6px;
+    border-radius: 15px;
     padding-left: 10px;
     padding-right: 10px;
 }
 
-QTextEdit:focus,QLineEdit:focus {
+.QTextEdit:focus,.QLineEdit:focus {
     border: 1px solid #2979ff;
 }
+
+QPushButton#login_btn {
+    border-radius: 15px;
+    background-color: #2979ff;
+    color: white;
+}
+
+QPushButton#login_btn:hover {
+    background-color: #2b85e4;
+}
+
+QPushButton#login_btn:pressed {
+    background-color: #a0cfff;
+}
+
