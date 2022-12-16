@@ -1,5 +1,7 @@
 #include "mysqlite.h"
 #include "sqlexception.cpp"
+#include <iostream>
+using namespace std;
 
 MySQLite::MySQLite()
 {
@@ -14,6 +16,38 @@ MySQLite::MySQLite()
         // 设置数据库文件名
         database.setDatabaseName("MyDataBase.db");
     }
+
+    openDb();
+    if (!isTableExist("student"))
+    {
+        // 学生表不存在，创建学生表
+        QString sql = "CREATE TABLE student("
+                      "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                      "name TEXT NOT NULL,"
+                      "gender TEXT NOT NULL,"
+                      "birth DATETIME NOT NULL,"
+                      "major TEXT NOT NULL,"
+                      "className TEXT NOT NULL"
+                      ");";
+        execute(sql);
+    }
+
+    if (!isTableExist("teacher"))
+    {
+        // 教师不存在，创建教师表
+        QString sql = "CREATE TABLE teacher("
+                      "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                      "name TEXT NOT NULL,"
+                      "gender TEXT NOT NULL,"
+                      "birth DATETIME NOT NULL,"
+                      "startDate DATETIME NOT NULL,"
+                      "department TEXT NOT NULL,"
+                      "post TEXT NULL,"
+                      "title TEXT NULL,"
+                      "type TEXT NOT NULL"
+                      ");";
+        execute(sql);
+    }
 }
 
 /**
@@ -21,14 +55,12 @@ MySQLite::MySQLite()
  * @brief MySQLite::openDb
  * @return
  */
-bool MySQLite::openDb()
+void MySQLite::openDb()
 {
     if (!database.open())
     {
-        qDebug() << "Error: Failed to connect database." << database.lastError();
-        return false;
+        throw SQLException("Error: Failed to connect database.\n" + database.lastError().text());
     }
-    return true;
 }
 
 /**
@@ -37,16 +69,23 @@ bool MySQLite::openDb()
  * @param sql
  * @return 执行结果
  */
-bool MySQLite::execute(QString sql)
+void MySQLite::execute(QString sql)
 {
     QSqlQuery sqlQuery;
     sqlQuery.prepare(sql);
-    if (sqlQuery.exec()) {
-        return true;
-    }
-    else {
-        qDebug() << sqlQuery.lastError();
-        return false;
+    execute(sqlQuery);
+}
+
+/**
+ * 执行 SQL 语句
+ * @brief execute
+ * @param query
+ * @return 执行结果
+ */
+void MySQLite::execute(QSqlQuery query)
+{
+    if (!query.exec()) {
+        throw SQLException(query.lastError().text());
     }
 }
 

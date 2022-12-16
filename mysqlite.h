@@ -10,9 +10,10 @@ class MySQLite
 {
 public:
     MySQLite();
-    bool openDb(void);
+    void openDb(void);
     QSqlQuery query(QString sql);
-    bool execute(QString sql);
+    void execute(QString sql);
+    void execute(QSqlQuery query);
     bool isTableExist(QString tableName);
     void close();
 

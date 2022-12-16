@@ -30,12 +30,14 @@ SOURCES += \
     mysqlite.cpp \
     myexception.cpp \
     person.cpp \
+    sqlcontroller.cpp \
     sqlexception.cpp
 
 HEADERS += \
         mainwidget.h \
     mainwindow.h \
-    mysqlite.h
+    mysqlite.h \
+    sqlcontroller.h
 
 FORMS += \
         mainwidget.ui \

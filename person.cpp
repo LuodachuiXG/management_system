@@ -8,18 +8,14 @@ class Person {
     QString name;
     QString gender;
     QDate birth;
-    int age;
 public:
+    Person() {}
     Person(int id, QString name, QString gender, QDate birth)
     {
         this->id = id;
         this->name = name;
         this->gender = gender;
         this->birth = birth;
-
-        // 计算年龄
-        QDate today = QDate::currentDate();
-        this->age = this->birth.daysTo(today) / 365;
     }
 
     int getId()
@@ -29,6 +25,7 @@ public:
 
     void setId(int id)
     {
+
         this->id = id;
     }
 
@@ -37,7 +34,7 @@ public:
         return name;
     }
 
-    void setId(QString name)
+    void setName(QString name)
     {
         this->name = name;
     }
@@ -64,12 +61,9 @@ public:
 
     int getAge()
     {
-        return age;
-    }
-
-    void setAge(int age)
-    {
-        this->age = age;
+        // 计算年龄
+        QDate today = QDate::currentDate();
+        return this->birth.daysTo(today) / 365;
     }
 };
 
@@ -78,6 +72,7 @@ class Student: public Person
     QString major;
     QString className;
 public:
+    Student() {}
     Student(int id, QString name, QString gender, QDate birth, QString major, QString className):
         Person(id, name, gender, birth)
     {
