@@ -4,8 +4,8 @@
 .QTextEdit,.QLineEdit {
     border: 1px solid #909399;
     border-radius: 15px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 .QTextEdit:focus,.QLineEdit:focus {

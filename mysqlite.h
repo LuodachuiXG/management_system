@@ -11,9 +11,9 @@ class MySQLite
 public:
     MySQLite();
     bool openDb(void);
-    QMap<QString, QString> query(QString &sql);
-    bool execute(QString &sql);
-    bool isTableExist(QString &tableName);
+    QSqlQuery query(QString sql);
+    bool execute(QString sql);
+    bool isTableExist(QString tableName);
     void close();
 
 private:

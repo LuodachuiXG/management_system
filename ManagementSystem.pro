@@ -26,14 +26,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwidget.cpp \
-    mysqlite.cpp
+    mainwindow.cpp \
+    mysqlite.cpp \
+    myexception.cpp \
+    person.cpp \
+    sqlexception.cpp
 
 HEADERS += \
         mainwidget.h \
+    mainwindow.h \
     mysqlite.h
 
 FORMS += \
-        mainwidget.ui
+        mainwidget.ui \
+        mainwindow.ui
 
 RESOURCES += \
     images.qrc \

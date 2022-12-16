@@ -16,5 +16,6 @@ int main(int argc, char *argv[])
     setStyle(":/css/css/mycss.css");
     MainWidget w;
     w.show();
+
     return a.exec();
 }

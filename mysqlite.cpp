@@ -1,4 +1,5 @@
 #include "mysqlite.h"
+#include "sqlexception.cpp"
 
 MySQLite::MySQLite()
 {
@@ -36,8 +37,60 @@ bool MySQLite::openDb()
  * @param sql
  * @return 执行结果
  */
-bool execute(QString &sql)
+bool MySQLite::execute(QString sql)
 {
+    QSqlQuery sqlQuery;
+    sqlQuery.prepare(sql);
+    if (sqlQuery.exec()) {
+        return true;
+    }
+    else {
+        qDebug() << sqlQuery.lastError();
+        return false;
+    }
+}
 
+/**
+ * 查询 SQL 语句
+ * @brief query
+ * @param sql
+ * @return
+ */
+QSqlQuery MySQLite::query(QString sql)
+{
+    QSqlQuery sqlQuery;
+    sqlQuery.prepare(sql);
+    if (sqlQuery.exec()) {
+        return sqlQuery;
+    }
+    else
+    {
+        throw SQLException(sqlQuery.lastError().text());
+    }
+}
+
+/**
+ * 查询表是否存在
+ * @brief isTableExist
+ * @param tableName
+ * @return
+ */
+bool MySQLite::isTableExist(QString tableName)
+{
+    QSqlDatabase database = QSqlDatabase::database();
+    if (database.tables().contains(tableName))
+    {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * 关闭数据库
+ * @brief close
+ */
+void MySQLite::close()
+{
+    database.close();
 }
 

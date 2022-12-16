@@ -38,8 +38,8 @@
     <rect>
      <x>50</x>
      <y>120</y>
-     <width>341</width>
-     <height>31</height>
+     <width>351</width>
+     <height>34</height>
     </rect>
    </property>
    <property name="font">
@@ -47,6 +47,12 @@
      <family>微软雅黑</family>
      <pointsize>11</pointsize>
     </font>
+   </property>
+   <property name="tabletTracking">
+    <bool>false</bool>
+   </property>
+   <property name="tabChangesFocus">
+    <bool>true</bool>
    </property>
    <property name="documentTitle">
     <string/>
@@ -63,8 +69,8 @@
     <rect>
      <x>50</x>
      <y>170</y>
-     <width>341</width>
-     <height>31</height>
+     <width>351</width>
+     <height>34</height>
     </rect>
    </property>
    <property name="font">
@@ -88,8 +94,8 @@
     <rect>
      <x>50</x>
      <y>230</y>
-     <width>341</width>
-     <height>31</height>
+     <width>351</width>
+     <height>34</height>
     </rect>
    </property>
    <property name="cursor">
