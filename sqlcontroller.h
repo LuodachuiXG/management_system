@@ -2,7 +2,7 @@
 #define SQLCONTROLLER_H
 #include <mysqlite.h>
 #include <vector>
-#include <person.cpp>
+#include <person.h>
 
 
 class SQLController

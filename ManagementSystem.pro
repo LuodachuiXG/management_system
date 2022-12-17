@@ -25,20 +25,23 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     about.cpp \
-        main.cpp \
-        mainwidget.cpp \
+    main.cpp \
+    mainwidget.cpp \
     mainwindow.cpp \
+    myio.cpp \
     mysqlite.cpp \
     myexception.cpp \
     person.cpp \
-    sqlcontroller.cpp \
-    sqlexception.cpp
+    sqlcontroller.cpp
 
 HEADERS += \
     about.h \
-        mainwidget.h \
+    mainwidget.h \
     mainwindow.h \
+    myexception.h \
+    myio.h \
     mysqlite.h \
+    person.h \
     sqlcontroller.h
 
 FORMS += \

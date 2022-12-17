@@ -6,6 +6,8 @@
 #include <sqlcontroller.h>
 #include <QMenu>
 #include <QAction>
+#include <myio.h>
+
 
 namespace Ui {
 class MainWindow;
@@ -34,14 +36,18 @@ private slots:
     // 删除学生槽
     void slotDeleteStudent();
     // 计算学生平均年龄槽
-    void slotcalStudentAvgAge();
+    void slotCalStudentAvgAge();
+    // 导出学生槽
+    void slotExportStudents();
 
     // 右键教师表格弹出菜单
     void slotTeacherTableViewMenu(QPoint pos);
     // 删除教师槽
     void slotDeleteTeacher();
     // 计算教师平均年龄槽
-    void slotcalTeacherAvgAge();
+    void slotCalTeacherAvgAge();
+    // 导出教师槽
+    void slotExportTeachers();
 
 
     void on_student_tableView_clicked(const QModelIndex &index);
@@ -64,7 +70,13 @@ private slots:
 
     void on_teacher_saveBtn_clicked();
 
-    void on_action_triggered();
+    void on_menu_about_triggered();
+
+    void on_menu_importStudent_triggered();
+
+    void on_menu_importAdminTeacher_triggered();
+
+    void on_menu_importFullTimeTeacher_triggered();
 
 private:
     // 当前选中的学生表行数索引
@@ -94,6 +106,9 @@ private:
     QAction *deleteTeacher;
     QAction *calTeacherAvgAge;
     QAction *exportTeachers;
+
+    // 文件输入输出流
+    MyIO myio;
 
 };
 

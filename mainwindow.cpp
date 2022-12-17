@@ -1,8 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <sqlexception.cpp>
-#include <QMessageBox>
-#include <about.h>
+#include "QMessageBox"
+#include "about.h"
+#include "QFileDialog"
+#include "myexception.cpp"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -74,7 +75,8 @@ void MainWindow::init()
 
     // 设置右键弹出菜单和删除学生、计算平均年龄、导出学生数据槽
     connect(deleteStudent, SIGNAL(triggered()), this, SLOT(slotDeleteStudent()));
-    connect(calStudentAvgAge, SIGNAL(triggered()), this, SLOT(slotcalStudentAvgAge()));
+    connect(calStudentAvgAge, SIGNAL(triggered()), this, SLOT(slotCalStudentAvgAge()));
+    connect(exportStudents, SIGNAL(triggered()), this, SLOT(slotExportStudents()));
     connect(ui->student_tableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slotStudentTableViewMenu(QPoint)));
 
     // 初始化学生页面组件数据
@@ -142,7 +144,8 @@ void MainWindow::init()
 
     // 设置右键弹出菜单和删除教师、计算平均年龄、导出教师数据槽
     connect(deleteTeacher, SIGNAL(triggered()), this, SLOT(slotDeleteTeacher()));
-    connect(calTeacherAvgAge, SIGNAL(triggered()), this, SLOT(slotcalTeacherAvgAge()));
+    connect(calTeacherAvgAge, SIGNAL(triggered()), this, SLOT(slotCalTeacherAvgAge()));
+    connect(exportTeachers, SIGNAL(triggered()), this, SLOT(slotExportTeachers()));
     connect(ui->teacher_tableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slotTeacherTableViewMenu(QPoint)));
 
     // 初始化教师页面组件数据
@@ -313,7 +316,7 @@ void MainWindow::slotDeleteStudent()
  * 计算学生平均年龄点击事件
  * @brief slotcalStudentAvgAge
  */
-void MainWindow::slotcalStudentAvgAge()
+void MainWindow::slotCalStudentAvgAge()
 {
     int sumAge = 0;
     int avg = 0;
@@ -323,6 +326,23 @@ void MainWindow::slotcalStudentAvgAge()
     }
     avg = sumAge / students.size();
     QMessageBox::information(this, "温馨提示", "学生平均年龄是：" + QString::number(avg));
+}
+
+/**
+ * 导出学生点击事件槽
+ * @brief MainWindow::slotExportStudents
+ */
+void MainWindow::slotExportStudents()
+{
+    QString dirPath = QFileDialog::getExistingDirectory(this, "选择导出目录", "./", QFileDialog::ShowDirsOnly);
+    if (dirPath.isEmpty())
+        return;
+    try {
+        myio.writeStudents(students, dirPath + "/导出学生数据.txt");
+        QMessageBox::information(this, "导出成功", "学生数据已经成功导出到\"" + dirPath + "/导出学生数据.txt\"");
+    } catch (IOException e) {
+        QMessageBox::critical(this, "导出失败", e.message());
+    }
 }
 
 /**
@@ -584,7 +604,7 @@ void MainWindow::slotDeleteTeacher()
  * 计算教师平均年龄事件槽
  * @brief MainWindow::slotcalTeacherAvgAge
  */
-void MainWindow::slotcalTeacherAvgAge()
+void MainWindow::slotCalTeacherAvgAge()
 {
     int sumAge = 0;
     int avg = 0;
@@ -609,6 +629,35 @@ void MainWindow::slotcalTeacherAvgAge()
     }
     QMessageBox::information(this, "温馨提示",
                              QString(teacherType == 0 ? "行政人员" : "专任教师") + "平均年龄是：" + QString::number(avg));
+}
+
+/**
+ * 导出教师数据事件槽
+ * @brief MainWindow::slotExportTeachers
+ */
+void MainWindow::slotExportTeachers()
+{
+    QString dirPath = QFileDialog::getExistingDirectory(this, "选择导出目录", "./", QFileDialog::ShowDirsOnly);
+    if (dirPath.isEmpty())
+        return;
+    try {
+        QString path = dirPath;
+        if (ui->teacher_typeComboBox->currentIndex() == 0)
+        {
+            // 行政人员
+            path.append("/导出行政人员数据.txt");
+            myio.writeTeacher(adminTeachers, path);
+        }
+        else
+        {
+            // 专任教师
+            path.append("/导出专任教师数据.txt");
+            myio.writeTeacher(fullTimeTeachers, path);
+        }
+        QMessageBox::information(this, "导出成功", "学生数据已经成功导出到\"" + path + "\"");
+    } catch (IOException e) {
+        QMessageBox::critical(this, "导出失败", e.message());
+    }
 }
 
 
@@ -746,14 +795,125 @@ void MainWindow::on_teacher_saveBtn_clicked()
     }
 }
 
-
 /**
  * 窗口菜单，关于点击事件
- * @brief MainWindow::on_action_triggered
+ * @brief MainWindow::on_menu_about_triggered
  */
-void MainWindow::on_action_triggered()
+void MainWindow::on_menu_about_triggered()
 {
     About a;
     a.exec();
+}
+
+
+/**
+ * 窗口菜单，导入学生点击事件
+ * @brief MainWindow::on_menu_importStudent_triggered
+ */
+void MainWindow::on_menu_importStudent_triggered()
+{
+    QMessageBox::information(this, "温馨提示", "请严格按照如下格式，否则读取失败\n"
+                             "张三#男#2001年01月01日#软件工程#21200271\n\n"
+                             "姓名#性别#出生年月#专业#班级");
+    QString path = QFileDialog::getOpenFileName(this, "选择学生数据文件", "./");
+    if (path.isEmpty())
+        return;
+    vector<Student> students;
+
+    try {
+        students = myio.readStudents(path);
+    } catch (IOException e) {
+        QMessageBox::critical(this, "导入失败", e.message());
+        return;
+    }
+
+    int count = 0;
+    for (int i = 0; i < students.size(); i++)
+    {
+        try {
+            sqlController->insertStudent(students[i]);
+            count++;
+        } catch (SQLException e) {
+            qDebug() << e.message();
+        }
+    }
+    updateStudents();
+    QMessageBox::information(this, "温馨提示", "总数据：" +
+                             QString::number(students.size()) +
+                             "，成功导入：" + QString::number(count));
+}
+
+/**
+ * 窗口菜单，导入行政人员点击事件
+ * @brief MainWindow::on_menu_importAdminTeacher_triggered
+ */
+void MainWindow::on_menu_importAdminTeacher_triggered()
+{
+    QMessageBox::information(this, "温馨提示", "请严格按照如下格式，否则读取失败\n"
+                             "张三#男#2001年01月01日#2020年08月23日#信息工程学院#院长\n\n"
+                             "姓名#性别#出生年月#工作时间#系部#职务");
+    QString path = QFileDialog::getOpenFileName(this, "选择行政人员数据文件", "./");
+    if (path.isEmpty())
+        return;
+    vector<AdminTeacher> teachers;
+
+    try {
+        teachers = myio.readAdminTeachers(path);
+    } catch (IOException e) {
+        QMessageBox::critical(this, "导入失败", e.message());
+        return;
+    }
+
+    int count = 0;
+    for (int i = 0; i < teachers.size(); i++)
+    {
+        try {
+            sqlController->insertAdminTeacher(teachers[i]);
+            count++;
+        } catch (SQLException e) {
+            qDebug() << e.message();
+        }
+    }
+    updateTeachers(0);
+    QMessageBox::information(this, "温馨提示", "总数据：" +
+                             QString::number(teachers.size()) +
+                             "，成功导入：" + QString::number(count));
+}
+
+/**
+ * 导入专任教师点击事件
+ * @brief MainWindow::on_menu_importFullTimeTeacher_triggered
+ */
+void MainWindow::on_menu_importFullTimeTeacher_triggered()
+{
+    QMessageBox::information(this, "温馨提示", "请严格按照如下格式，否则读取失败\n"
+                             "张三#男#2001年01月01日#2020年08月23日#信息工程学院#老师\n\n"
+                             "姓名#性别#出生年月#工作时间#系部#职称");
+    QString path = QFileDialog::getOpenFileName(this, "选择专任教师数据文件", "./");
+    if (path.isEmpty())
+        return;
+    vector<FullTimeTeacher> teachers;
+
+    try {
+        teachers = myio.readFullTimeTeachers(path);
+    } catch (IOException e) {
+        QMessageBox::critical(this, "导入失败", e.message());
+        return;
+    }
+
+    int count = 0;
+    for (int i = 0; i < teachers.size(); i++)
+    {
+        try {
+            sqlController->insertFullTimeTeacher(teachers[i]);
+            count++;
+        } catch (SQLException e) {
+            qDebug() << e.message();
+        }
+    }
+    updateTeachers(1);
+    QMessageBox::information(this, "温馨提示", "总数据：" +
+                             QString::number(teachers.size()) +
+                             "，成功导入：" + QString::number(count));
 }
 

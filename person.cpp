@@ -1,188 +1,152 @@
-#include <QString>
-#include <QDate>
-#include <iostream>
-using namespace std;
+#include "person.h"
 
-class Person {
-    int id;
-    QString name;
-    QString gender;
-    QDate birth;
-public:
-    Person() {}
-    Person(int id, QString name, QString gender, QDate birth)
-    {
-        this->id = id;
-        this->name = name;
-        this->gender = gender;
-        this->birth = birth;
-    }
-
-    int getId()
-    {
-        return id;
-    }
-
-    void setId(int id)
-    {
-
-        this->id = id;
-    }
-
-    QString getName()
-    {
-        return name;
-    }
-
-    void setName(QString name)
-    {
-        this->name = name;
-    }
-
-    QString getGender()
-    {
-        return gender;
-    }
-
-    void setGender(QString gender)
-    {
-        this->gender = gender;
-    }
-
-    QDate getBirth()
-    {
-        return birth;
-    }
-
-    void setBirth(QDate birth)
-    {
-        this->birth = birth;
-    }
-
-    int getAge()
-    {
-        // 计算年龄
-        QDate today = QDate::currentDate();
-        return this->birth.daysTo(today) / 365;
-    }
-};
-
-class Student: public Person
+Person::Person() {}
+Person::Person(int id, QString name, QString gender, QDate birth)
 {
-    QString major;
-    QString className;
-public:
-    Student() {}
-    Student(int id, QString name, QString gender, QDate birth, QString major, QString className):
-        Person(id, name, gender, birth)
-    {
-        this->major = major;
-        this->className = className;
-    }
+    this->id = id;
+    this->name = name;
+    this->gender = gender;
+    this->birth = birth;
+}
 
-    QString getMajor()
-    {
-        return major;
-    }
-
-    void setMajor(QString major)
-    {
-        this->major = major;
-    }
-
-    QString getClassName()
-    {
-        return className;
-    }
-
-    void setClassName(QString className)
-    {
-        this->className = className;
-    }
-
-};
-
-
-class Teacher: public Person
+int Person::getId()
 {
-    QDate startDate;
-    QString department;
-public:
-    Teacher() {}
-    Teacher(int id, QString name, QString gender, QDate birth, QDate startDate, QString department):
+    return id;
+}
+
+void Person::setId(int id)
+{
+
+    this->id = id;
+}
+
+QString Person::getName()
+{
+    return name;
+}
+
+void Person::setName(QString name)
+{
+    this->name = name;
+}
+
+QString Person::getGender()
+{
+    return gender;
+}
+
+void Person::setGender(QString gender)
+{
+    this->gender = gender;
+}
+
+QDate Person::getBirth()
+{
+    return birth;
+}
+
+void Person::setBirth(QDate birth)
+{
+    this->birth = birth;
+}
+
+int Person::getAge()
+{
+    // 计算年龄
+    QDate today = QDate::currentDate();
+    return this->birth.daysTo(today) / 365;
+}
+
+Student::Student() {}
+Student::Student(int id, QString name, QString gender, QDate birth, QString major, QString className):
         Person(id, name, gender, birth)
-    {
-        this->startDate = startDate;
-        this->department = department;
-    }
+{
+    this->major = major;
+    this->className = className;
+}
 
-    QDate getStartDate()
-    {
-        return startDate;
-    }
+QString Student::getMajor()
+{
+    return major;
+}
 
-    void setStartDate(QDate startDate)
-    {
-        this->startDate = startDate;
-    }
+void Student::setMajor(QString major)
+{
+    this->major = major;
+}
 
-    QString getDepartment()
-    {
-        return department;
-    }
+QString Student::getClassName()
+{
+    return className;
+}
 
-    void setDepartment(QString department)
-    {
-        this->department = department;
-    }
-};
+void Student::setClassName(QString className)
+{
+    this->className = className;
+}
+
+Teacher::Teacher() {}
+Teacher::Teacher(int id, QString name, QString gender, QDate birth, QDate startDate, QString department):
+        Person(id, name, gender, birth)
+{
+    this->startDate = startDate;
+    this->department = department;
+}
+
+QDate Teacher::getStartDate()
+{
+    return startDate;
+}
+
+void Teacher::setStartDate(QDate startDate)
+{
+    this->startDate = startDate;
+}
+
+QString Teacher::getDepartment()
+{
+    return department;
+}
+
+void Teacher::setDepartment(QString department)
+{
+    this->department = department;
+}
 
 // 行政人员
-class AdminTeacher: public Teacher
-{
-    // 职务
-    QString post;
-public:
-    AdminTeacher() {}
-    AdminTeacher(int id, QString name, QString gender, QDate birth,
+AdminTeacher::AdminTeacher() {}
+    AdminTeacher::AdminTeacher(int id, QString name, QString gender, QDate birth,
                         QDate startDate, QString department, QString post):
         Teacher(id, name, gender, birth, startDate, department)
-    {
-        this->post = post;
-    }
+{
+    this->post = post;
+}
 
-    QString getPost()
-    {
-        return post;
-    }
+QString AdminTeacher::getPost()
+{
+    return post;
+}
 
-    void setPost(QString post)
-    {
-        this->post = post;
-    }
-};
+void AdminTeacher::setPost(QString post)
+{
+    this->post = post;
+}
 
 // 专任教师
-class FullTimeTeacher: public Teacher
-{
-    // 职称
-    QString title;
-public:
-    FullTimeTeacher() {}
-    FullTimeTeacher(int id, QString name, QString gender, QDate birth,
+FullTimeTeacher::FullTimeTeacher() {}
+FullTimeTeacher::FullTimeTeacher(int id, QString name, QString gender, QDate birth,
                     QDate startDate, QString department, QString title):
         Teacher(id, name, gender, birth, startDate, department)
-    {
-        this->title = title;
-    }
+{
+    this->title = title;
+}
 
-    QString getTitle()
-    {
-        return title;
-    }
+QString FullTimeTeacher::getTitle()
+{
+    return title;
+}
 
-    void setTitle(QString title)
-    {
-        this->title = title;
-    }
-};
+void FullTimeTeacher::setTitle(QString title)
+{
+    this->title = title;
+}

@@ -1,7 +1,6 @@
 #include "mainwidget.h"
 #include <QApplication>
 #include <QFile>
-#include <person.cpp>
 
 static void setStyle(const QString &styleName)
 {

@@ -613,21 +613,22 @@
     <property name="title">
      <string>文件</string>
     </property>
-    <addaction name="actionHome"/>
-    <addaction name="action_2"/>
+    <addaction name="menu_importStudent"/>
+    <addaction name="menu_importAdminTeacher"/>
+    <addaction name="menu_importFullTimeTeacher"/>
     <addaction name="separator"/>
-    <addaction name="action_3"/>
+    <addaction name="menu_exit"/>
    </widget>
    <widget class="QMenu" name="menu">
     <property name="title">
      <string>帮助</string>
     </property>
-    <addaction name="action"/>
+    <addaction name="menu_about"/>
    </widget>
    <addaction name="menuSetting"/>
    <addaction name="menu"/>
   </widget>
-  <action name="actionHome">
+  <action name="menu_importStudent">
    <property name="icon">
     <iconset theme="face-kiss">
      <normaloff>.</normaloff>.</iconset>
@@ -636,7 +637,7 @@
     <string>导入学生</string>
    </property>
   </action>
-  <action name="action">
+  <action name="menu_about">
    <property name="icon">
     <iconset theme="face-smile">
      <normaloff>.</normaloff>.</iconset>
@@ -645,7 +646,7 @@
     <string>关于</string>
    </property>
   </action>
-  <action name="action_3">
+  <action name="menu_exit">
    <property name="icon">
     <iconset theme="application-exit">
      <normaloff>.</normaloff>.</iconset>
@@ -654,13 +655,24 @@
     <string>退出</string>
    </property>
   </action>
-  <action name="action_2">
+  <action name="menu_importAdminTeacher">
    <property name="icon">
     <iconset theme="face-cool">
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
-    <string>导入教师</string>
+    <string>导入行政人员</string>
+   </property>
+   <property name="toolTip">
+    <string>导入行政人员</string>
+   </property>
+  </action>
+  <action name="menu_importFullTimeTeacher">
+   <property name="icon">
+    <iconset theme="face-smirk"/>
+   </property>
+   <property name="text">
+    <string>导入专任教师</string>
    </property>
   </action>
  </widget>

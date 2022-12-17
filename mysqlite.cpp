@@ -1,6 +1,5 @@
 #include "mysqlite.h"
-#include "sqlexception.cpp"
-#include <iostream>
+#include "myexception.h"
 using namespace std;
 
 MySQLite::MySQLite()

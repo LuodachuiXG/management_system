@@ -1,16 +1,20 @@
-#include <QString>
-class MyException {
-public:
-    MyException(): errMsg("") {}
-    MyException(QString errMsg)
-    {
-        this->errMsg = errMsg;
-    }
-    QString message()
-    {
-        return errMsg;
-    }
+#include <myexception.h>
 
-private:
-    QString errMsg;
-};
+MyException::MyException() {
+    this->errMsg = "";
+}
+MyException::MyException(QString errMsg)
+{
+    this->errMsg = errMsg;
+}
+QString MyException::message()
+{
+    return errMsg;
+}
+
+SQLException::SQLException(): MyException() {}
+SQLException::SQLException(QString errMsg): MyException(errMsg) {}
+
+IOException::IOException(): MyException() {}
+IOException::IOException(QString errMsg): MyException(errMsg) {}
+
