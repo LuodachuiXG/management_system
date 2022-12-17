@@ -12,6 +12,7 @@ public:
     ~SQLController();
     vector<Student> getAllStudent();
     void insertStudent(Student &student);
+    void updateStudent(Student &student);
     void deleteStudent(QString &id);
 private:
     MySQLite *sqlite;

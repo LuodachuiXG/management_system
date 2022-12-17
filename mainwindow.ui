@@ -25,6 +25,9 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTabWidget" name="tabWidget">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -72,6 +75,9 @@
         <italic>false</italic>
         <bold>false</bold>
        </font>
+      </property>
+      <property name="tabChangesFocus">
+       <bool>true</bool>
       </property>
      </widget>
      <widget class="QLabel" name="label">
@@ -150,6 +156,9 @@
         <bold>false</bold>
        </font>
       </property>
+      <property name="tabChangesFocus">
+       <bool>true</bool>
+      </property>
      </widget>
      <widget class="QLabel" name="label_4">
       <property name="geometry">
@@ -181,6 +190,9 @@
         <bold>false</bold>
        </font>
       </property>
+      <property name="tabChangesFocus">
+       <bool>true</bool>
+      </property>
      </widget>
      <widget class="QLabel" name="label_5">
       <property name="geometry">
@@ -208,6 +220,55 @@
        <string>添加学生</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="student_saveBtn">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>630</x>
+        <y>260</y>
+        <width>125</width>
+        <height>34</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>保存</string>
+      </property>
+      <property name="checkable">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="student_returnBtn">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>765</x>
+        <y>260</y>
+        <width>125</width>
+        <height>34</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>返回添加</string>
+      </property>
+     </widget>
+     <zorder>student_addBtn</zorder>
+     <zorder>student_tableView</zorder>
+     <zorder>student_nameEdit</zorder>
+     <zorder>label</zorder>
+     <zorder>label_2</zorder>
+     <zorder>student_genderComboBox</zorder>
+     <zorder>label_3</zorder>
+     <zorder>student_birthDateEdit</zorder>
+     <zorder>student_majorEdit</zorder>
+     <zorder>label_4</zorder>
+     <zorder>student_classNameEdit</zorder>
+     <zorder>label_5</zorder>
+     <zorder>student_saveBtn</zorder>
+     <zorder>student_returnBtn</zorder>
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
@@ -232,18 +293,47 @@
    </property>
    <widget class="QMenu" name="menuSetting">
     <property name="title">
-     <string>设置</string>
+     <string>文件</string>
     </property>
     <addaction name="actionHome"/>
+    <addaction name="separator"/>
+    <addaction name="action_3"/>
+   </widget>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>帮助</string>
+    </property>
+    <addaction name="action"/>
    </widget>
    <addaction name="menuSetting"/>
+   <addaction name="menu"/>
   </widget>
   <action name="actionHome">
    <property name="text">
-    <string>Home</string>
+    <string>导入学生</string>
+   </property>
+  </action>
+  <action name="action">
+   <property name="text">
+    <string>关于</string>
+   </property>
+  </action>
+  <action name="action_3">
+   <property name="text">
+    <string>退出</string>
    </property>
   </action>
  </widget>
+ <tabstops>
+  <tabstop>student_nameEdit</tabstop>
+  <tabstop>student_genderComboBox</tabstop>
+  <tabstop>student_birthDateEdit</tabstop>
+  <tabstop>student_majorEdit</tabstop>
+  <tabstop>student_classNameEdit</tabstop>
+  <tabstop>student_addBtn</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>student_tableView</tabstop>
+ </tabstops>
  <resources>
   <include location="images.qrc"/>
  </resources>

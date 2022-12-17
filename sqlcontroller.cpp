@@ -9,7 +9,11 @@ SQLController::~SQLController()
     sqlite->close();
 }
 
-// 获取所有学生数据
+/**
+ * 获取所有学生数据
+ * @brief SQLController::getAllStudent
+ * @return
+ */
 vector<Student> SQLController::getAllStudent()
 {
     vector<Student> list;
@@ -30,7 +34,11 @@ vector<Student> SQLController::getAllStudent()
 }
 
 
-// 添加学生
+/**
+ * 添加学生
+ * @brief SQLController::insertStudent
+ * @param student
+ */
 void SQLController::insertStudent(Student &student)
 {
     QString sql = "INSERT INTO student(id, name, gender, birth, major, className)"
@@ -45,7 +53,30 @@ void SQLController::insertStudent(Student &student)
     sqlite->execute(query);
 }
 
-// 删除学生
+/**
+ * 更新学生
+ * @brief SQLController::updateStudent
+ * @param student
+ */
+void SQLController::updateStudent(Student &student)
+{
+    QString sql = "UPDATE student SET name=?, gender=?, birth=?, major=?, className=? WHERE id=?";
+    QSqlQuery query;
+    query.prepare(sql);
+    query.addBindValue(student.getName());
+    query.addBindValue(student.getGender());
+    query.addBindValue(student.getBirth());
+    query.addBindValue(student.getMajor());
+    query.addBindValue(student.getClassName());
+    query.addBindValue(student.getId());
+    sqlite->execute(query);
+}
+
+/**
+ * 删除学生
+ * @brief SQLController::deleteStudent
+ * @param id
+ */
 void SQLController::deleteStudent(QString &id)
 {
     QString sql = "DELETE FROM student WHERE id=?";
