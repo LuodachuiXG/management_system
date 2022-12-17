@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <sqlexception.cpp>
 #include <QMessageBox>
+#include <about.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -743,5 +744,16 @@ void MainWindow::on_teacher_saveBtn_clicked()
         // 保存失败
         QMessageBox::critical(this, "保存失败", e.message());
     }
+}
+
+
+/**
+ * 窗口菜单，关于点击事件
+ * @brief MainWindow::on_action_triggered
+ */
+void MainWindow::on_action_triggered()
+{
+    About a;
+    a.exec();
 }
 

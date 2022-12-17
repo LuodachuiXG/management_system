@@ -64,6 +64,8 @@ private slots:
 
     void on_teacher_saveBtn_clicked();
 
+    void on_action_triggered();
+
 private:
     // 当前选中的学生表行数索引
     int currentStudentIndex = 0;

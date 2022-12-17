@@ -2,5 +2,6 @@
     <qresource prefix="/img">
         <file>image/icon.png</file>
         <file>image/登录页标题图.jpg</file>
+        <file>image/avatar.png</file>
     </qresource>
 </RCC>
