@@ -108,6 +108,7 @@ class Teacher: public Person
     QDate startDate;
     QString department;
 public:
+    Teacher() {}
     Teacher(int id, QString name, QString gender, QDate birth, QDate startDate, QString department):
         Person(id, name, gender, birth)
     {
@@ -120,7 +121,7 @@ public:
         return startDate;
     }
 
-    void setStartDater(QDate startDate)
+    void setStartDate(QDate startDate)
     {
         this->startDate = startDate;
     }
@@ -137,12 +138,13 @@ public:
 };
 
 // 行政人员
-class AdministrativeStaff: public Teacher
+class AdminTeacher: public Teacher
 {
     // 职务
     QString post;
 public:
-    AdministrativeStaff(int id, QString name, QString gender, QDate birth,
+    AdminTeacher() {}
+    AdminTeacher(int id, QString name, QString gender, QDate birth,
                         QDate startDate, QString department, QString post):
         Teacher(id, name, gender, birth, startDate, department)
     {
@@ -166,6 +168,7 @@ class FullTimeTeacher: public Teacher
     // 职称
     QString title;
 public:
+    FullTimeTeacher() {}
     FullTimeTeacher(int id, QString name, QString gender, QDate birth,
                     QDate startDate, QString department, QString title):
         Teacher(id, name, gender, birth, startDate, department)

@@ -24,6 +24,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+    about.cpp \
         main.cpp \
         mainwidget.cpp \
     mainwindow.cpp \
@@ -34,12 +35,14 @@ SOURCES += \
     sqlexception.cpp
 
 HEADERS += \
+    about.h \
         mainwidget.h \
     mainwindow.h \
     mysqlite.h \
     sqlcontroller.h
 
 FORMS += \
+        about.ui \
         mainwidget.ui \
         mainwindow.ui
 

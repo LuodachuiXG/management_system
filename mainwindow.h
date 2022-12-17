@@ -17,10 +17,15 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
+
     void init();
     void updateStudents();
     void clearStudentEdit();
-    ~MainWindow();
+
+    void updateTeachers(int type);
+    void clearTeacherEdit();
+
 
 private slots:
     void on_student_addBtn_clicked();
@@ -31,15 +36,42 @@ private slots:
     // 计算学生平均年龄槽
     void slotcalStudentAvgAge();
 
+    // 右键教师表格弹出菜单
+    void slotTeacherTableViewMenu(QPoint pos);
+    // 删除教师槽
+    void slotDeleteTeacher();
+    // 计算教师平均年龄槽
+    void slotcalTeacherAvgAge();
+
+
     void on_student_tableView_clicked(const QModelIndex &index);
 
     void on_student_saveBtn_clicked();
 
     void on_student_returnBtn_clicked();
 
+    void on_action_3_triggered();
+
+    void on_teacher_typeComboBox_currentIndexChanged(int index);
+
+    void on_teacher_typeComboBoxEdit_currentIndexChanged(int index);
+
+    void on_teacher_addBtn_clicked();
+
+    void on_teacher_returnBtn_clicked();
+
+    void on_teacher_tableView_clicked(const QModelIndex &index);
+
+    void on_teacher_saveBtn_clicked();
+
 private:
-    // 当前选中的表行数索引
-    int currentIndex = 0;
+    // 当前选中的学生表行数索引
+    int currentStudentIndex = 0;
+    // 当前选中的教师表行数索引
+    int currentTeacherIndex = 0;
+    // 当前选中的教师类型，0：行政人员，1：专任教师
+    int currentTeacherType = 0;
+
 
     Ui::MainWindow *ui;
     SQLController *sqlController;
@@ -49,9 +81,17 @@ private:
     QMenu *studentPopMenu;
     QAction *deleteStudent;
     QAction *calStudentAvgAge;
+    QAction *exportStudents;
 
 
-    QStandardItemModel *teacherModel;
+    QStandardItemModel *adminTeacherModel;
+    QStandardItemModel *fullTimeTeacherModel;
+    vector<AdminTeacher> adminTeachers;
+    vector<FullTimeTeacher> fullTimeTeachers;
+    QMenu *teacherPopMenu;
+    QAction *deleteTeacher;
+    QAction *calTeacherAvgAge;
+    QAction *exportTeachers;
 
 };
 
