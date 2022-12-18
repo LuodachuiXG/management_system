@@ -1,5 +1,9 @@
 ## 基于 Qt 的高校人员信息管理系统
 
+[Github](https://github.com/LuodachuiXG/management_system)
+
+[Gitee](https://gitee.com/luodachui/management_system)
+
 C++ 期末课设作业
 
 时间紧迫，部分代码可能冗余，但是功能正常，暂时没发现 BUG
