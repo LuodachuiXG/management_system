@@ -25,8 +25,14 @@ MainWindow::~MainWindow()
     delete exportStudents;
     delete adminTeacherModel;
     delete fullTimeTeacherModel;
+    delete teacherPopMenu;
+    delete deleteTeacher;
+    delete calTeacherAvgAge;
+    delete exportTeachers;
+    delete searchStudentModel;
+    delete searchAdminTeacherModel;
+    delete searchFullTimeTeacherModel;
 }
-
 /**
  * 初始化数据
  * @brief MainWindow::init
@@ -80,8 +86,7 @@ void MainWindow::init()
     connect(ui->student_tableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slotStudentTableViewMenu(QPoint)));
 
     // 初始化学生页面组件数据
-    ui->student_genderComboBox->addItem("男");
-    ui->student_genderComboBox->addItem("女");
+    ui->student_genderComboBox->addItems({"男", "女"});
     // 设置学生保存和返回添加按钮默认不显示
     ui->student_saveBtn->setVisible(false);
     ui->student_returnBtn->setVisible(false);
@@ -149,12 +154,9 @@ void MainWindow::init()
     connect(ui->teacher_tableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slotTeacherTableViewMenu(QPoint)));
 
     // 初始化教师页面组件数据
-    ui->teacher_typeComboBox->addItem("行政人员");
-    ui->teacher_typeComboBox->addItem("专任教师");
-    ui->teacher_typeComboBoxEdit->addItem("行政人员");
-    ui->teacher_typeComboBoxEdit->addItem("专任教师");
-    ui->teacher_genderComboBox->addItem("男");
-    ui->teacher_genderComboBox->addItem("女");
+    ui->teacher_typeComboBox->addItems({"行政人员", "专任教师"});
+    ui->teacher_typeComboBoxEdit->addItems({"行政人员", "专任教师"});
+    ui->teacher_genderComboBox->addItems({"男", "女"});
     // 设置教师保存和返回添加按钮默认不显示
     ui->teacher_saveBtn->setVisible(false);
     ui->teacher_returnBtn->setVisible(false);
@@ -162,6 +164,70 @@ void MainWindow::init()
     // 刷新教师数据
     updateTeachers(0);
     updateTeachers(1);
+
+
+
+
+
+
+    /** 设置搜索页面组件数据 **/
+    // 设置搜索页面学生表格项
+    searchStudentModel = new QStandardItemModel();
+    searchStudentModel->setHorizontalHeaderItem(0, new QStandardItem("编号"));
+    searchStudentModel->setHorizontalHeaderItem(1, new QStandardItem("姓名"));
+    searchStudentModel->setHorizontalHeaderItem(2, new QStandardItem("性别"));
+    searchStudentModel->setHorizontalHeaderItem(3, new QStandardItem("出生年月"));
+    searchStudentModel->setHorizontalHeaderItem(4, new QStandardItem("年龄"));
+    searchStudentModel->setHorizontalHeaderItem(5, new QStandardItem("专业"));
+    searchStudentModel->setHorizontalHeaderItem(6, new QStandardItem("班级"));
+
+    // 设置搜索页面行政人员教师表格项
+    searchAdminTeacherModel = new QStandardItemModel();
+    searchAdminTeacherModel->setHorizontalHeaderItem(0, new QStandardItem("编号"));
+    searchAdminTeacherModel->setHorizontalHeaderItem(1, new QStandardItem("姓名"));
+    searchAdminTeacherModel->setHorizontalHeaderItem(2, new QStandardItem("性别"));
+    searchAdminTeacherModel->setHorizontalHeaderItem(3, new QStandardItem("出生年月"));
+    searchAdminTeacherModel->setHorizontalHeaderItem(4, new QStandardItem("年龄"));
+    searchAdminTeacherModel->setHorizontalHeaderItem(5, new QStandardItem("工作时间"));
+    searchAdminTeacherModel->setHorizontalHeaderItem(6, new QStandardItem("系部"));
+    searchAdminTeacherModel->setHorizontalHeaderItem(7, new QStandardItem("职务信息"));
+
+    // 设置搜索页面专任教师表格项
+    searchFullTimeTeacherModel = new QStandardItemModel();
+    searchFullTimeTeacherModel->setHorizontalHeaderItem(0, new QStandardItem("编号"));
+    searchFullTimeTeacherModel->setHorizontalHeaderItem(1, new QStandardItem("姓名"));
+    searchFullTimeTeacherModel->setHorizontalHeaderItem(2, new QStandardItem("性别"));
+    searchFullTimeTeacherModel->setHorizontalHeaderItem(3, new QStandardItem("出生年月"));
+    searchFullTimeTeacherModel->setHorizontalHeaderItem(4, new QStandardItem("年龄"));
+    searchFullTimeTeacherModel->setHorizontalHeaderItem(5, new QStandardItem("工作时间"));
+    searchFullTimeTeacherModel->setHorizontalHeaderItem(6, new QStandardItem("系部"));
+    searchFullTimeTeacherModel->setHorizontalHeaderItem(7, new QStandardItem("职称信息"));
+
+
+    ui->search_groupComboBox->addItems({"学生", "行政人员", "专任教师"});
+    // 搜索页面表格只能选择一列，选中整行，不可编辑
+    ui->search_tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->search_tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->search_tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    // 设置搜索表格可弹出右键菜单
+    ui->search_tableView->setContextMenuPolicy(Qt::CustomContextMenu);
+    // 新建右键弹出菜单
+    searchPopMenu = new QMenu(ui->search_tableView);
+    searchDelete = new QAction("删除", ui->search_tableView);
+    searchCalAvgAge = new QAction("计算平均年龄", ui->search_tableView);
+    searchExport = new QAction("导出数据", ui->search_tableView);
+    searchPopMenu->addAction(searchDelete);
+    searchPopMenu->addAction(searchCalAvgAge);
+    searchPopMenu->addSeparator();
+    searchPopMenu->addAction(searchExport);
+
+    // 设置右键弹出菜单和删除、计算平均年龄、导出数据槽
+    connect(searchDelete, SIGNAL(triggered()), this, SLOT(slotSearchDelete()));
+    connect(searchCalAvgAge, SIGNAL(triggered()), this, SLOT(slotSearchCalAvgAge()));
+    connect(searchExport, SIGNAL(triggered()), this, SLOT(slotSearchExport()));
+    connect(ui->search_tableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slotSearchTableViewMenu(QPoint)));
+
 }
 
 /**
@@ -379,17 +445,6 @@ void MainWindow::clearStudentEdit()
     ui->student_birthDateEdit->setDate(QDate(2001, 1, 1));
     ui->student_majorEdit->clear();
     ui->student_classNameEdit->clear();
-}
-
-
-
-/**
- * 退出程序
- * @brief MainWindow::on_action_3_triggered
- */
-void MainWindow::on_action_3_triggered()
-{
-    qApp->quit();
 }
 
 
@@ -917,3 +972,324 @@ void MainWindow::on_menu_importFullTimeTeacher_triggered()
                              "，成功导入：" + QString::number(count));
 }
 
+/**
+ * 窗口菜单，退出程序
+ * @brief MainWindow::on_menu_exit_triggered
+ */
+void MainWindow::on_menu_exit_triggered()
+{
+    qApp->quit();
+}
+
+/**
+ * 窗口 TabWidget 改变事件
+ * @brief MainWindow::on_tabWidget_currentChanged
+ * @param index
+ */
+void MainWindow::on_tabWidget_currentChanged(int index)
+{
+    switch (index)
+    {
+    case 0:
+        // 学生
+        updateStudents();
+        break;
+    case 1:
+        // 教师
+        updateTeachers(ui->teacher_typeComboBox->currentIndex());
+        break;
+    case 2:
+        // 查询
+        break;
+    }
+}
+
+/**
+ * 搜索页面，群体 ComboBox 选项变更事件
+ * @brief MainWindow::on_search_groupComboBox_currentIndexChanged
+ * @param index
+ */
+void MainWindow::on_search_groupComboBox_currentIndexChanged(int index)
+{
+    ui->search_typeComboBox->clear();
+    if (index == 0)
+    {
+        // 学生
+        ui->search_typeComboBox->addItems({"姓名", "专业"});
+    }
+    else
+    {
+        // 1 | 2，行政人员 | 专任教师
+        ui->search_typeComboBox->addItems({"姓名", "系部"});
+    }
+}
+
+/**
+ * 搜索页面，类型 ComboBox 选项文字变更事件
+ * @brief MainWindow::on_search_typeComboBox_currentTextChanged
+ * @param arg1
+ */
+void MainWindow::on_search_typeComboBox_currentTextChanged(const QString &arg1)
+{
+    QString editStr = "请输入" + ui->search_groupComboBox->currentText() + arg1;
+    ui->search_keyEdit->setPlaceholderText(editStr);
+    ui->search_keyLabel->setText(arg1);
+}
+
+/**
+ * 搜索页面，搜索按钮单击事件
+ * @brief MainWindow::on_search_searchBtn_clicked
+ */
+void MainWindow::on_search_searchBtn_clicked()
+{
+    QString key = ui->search_keyEdit->toPlainText();
+    QString group = ui->search_groupComboBox->currentText();
+    QString type = ui->search_typeComboBox->currentText();
+    searchKey = key;
+    searchGroup = group;
+    searchType = type;
+
+    if (searchKey.isEmpty())
+    {
+        QMessageBox::information(this, "温馨提示", "请输入要搜索的关键词");
+        return;
+    }
+
+    // 更新搜索数据
+    updateSearch();
+}
+
+
+/**
+ * 更新搜索数据
+ * @brief MainWindow::updateSearch
+ */
+void MainWindow::updateSearch()
+{
+    if (searchGroup == "学生")
+    {
+        searchStudentModel->removeRows(0, searchStudentModel->rowCount());
+        ui->search_tableView->setModel(searchStudentModel);
+        if (searchType == "姓名")
+            searchStudents = sqlController->getStudentByName(searchKey);
+        else
+            searchStudents = sqlController->getStudentByMajor(searchKey);
+        int cout = 0;
+        for (auto it = searchStudents.begin(); it != searchStudents.end(); it++)
+        {
+            searchStudentModel->setItem(cout, 0, new QStandardItem(QString::number(it->getId())));
+            searchStudentModel->setItem(cout, 1, new QStandardItem(it->getName()));
+            searchStudentModel->setItem(cout, 2, new QStandardItem(it->getGender()));
+            searchStudentModel->setItem(cout, 3, new QStandardItem(it->getBirth().toString("yyyy年MM月dd日")));
+            searchStudentModel->setItem(cout, 4, new QStandardItem(QString::number(it->getAge())));
+            searchStudentModel->setItem(cout, 5, new QStandardItem(it->getMajor()));
+            searchStudentModel->setItem(cout, 6, new QStandardItem(it->getClassName()));
+            cout++;
+        }
+    }
+    else if (searchGroup == "行政人员")
+    {
+        searchAdminTeacherModel->removeRows(0, searchAdminTeacherModel->rowCount());
+        ui->search_tableView->setModel(searchAdminTeacherModel);
+        if (searchType == "姓名")
+            searchAdminTeachers = sqlController->getAdminTeacherByName(searchKey);
+        else
+            searchAdminTeachers = sqlController->getAdminTeacherByDepartment(searchKey);
+        int cout = 0;
+        for (auto it = searchAdminTeachers.begin(); it != searchAdminTeachers.end(); it++)
+        {
+            searchAdminTeacherModel->setItem(cout, 0, new QStandardItem(QString::number(it->getId())));
+            searchAdminTeacherModel->setItem(cout, 1, new QStandardItem(it->getName()));
+            searchAdminTeacherModel->setItem(cout, 2, new QStandardItem(it->getGender()));
+            searchAdminTeacherModel->setItem(cout, 3, new QStandardItem(it->getBirth().toString("yyyy年MM月dd日")));
+            searchAdminTeacherModel->setItem(cout, 4, new QStandardItem(QString::number(it->getAge())));
+            searchAdminTeacherModel->setItem(cout, 5, new QStandardItem(it->getStartDate().toString("yyyy年MM月dd日")));
+            searchAdminTeacherModel->setItem(cout, 6, new QStandardItem(it->getDepartment()));
+            searchAdminTeacherModel->setItem(cout, 7, new QStandardItem(it->getPost()));
+            cout++;
+        }
+    }
+    else
+    {
+        // 专任教师
+        searchFullTimeTeacherModel->removeRows(0, searchFullTimeTeacherModel->rowCount());
+        ui->search_tableView->setModel(searchFullTimeTeacherModel);
+        if (searchType == "姓名")
+            searchFullTimeTeachers = sqlController->getFullTimeTeacherByName(searchKey);
+        else
+            searchFullTimeTeachers = sqlController->getFullTimeTeacherByDepartment(searchKey);
+        int cout = 0;
+        for (auto it = searchFullTimeTeachers.begin(); it != searchFullTimeTeachers.end(); it++)
+        {
+                searchFullTimeTeacherModel->setItem(cout, 0, new QStandardItem(QString::number(it->getId())));
+                searchFullTimeTeacherModel->setItem(cout, 1, new QStandardItem(it->getName()));
+                searchFullTimeTeacherModel->setItem(cout, 2, new QStandardItem(it->getGender()));
+                searchFullTimeTeacherModel->setItem(cout, 3, new QStandardItem(it->getBirth().toString("yyyy年MM月dd日")));
+                searchFullTimeTeacherModel->setItem(cout, 4, new QStandardItem(QString::number(it->getAge())));
+                searchFullTimeTeacherModel->setItem(cout, 5, new QStandardItem(it->getStartDate().toString("yyyy年MM月dd日")));
+                searchFullTimeTeacherModel->setItem(cout, 6, new QStandardItem(it->getDepartment()));
+                searchFullTimeTeacherModel->setItem(cout, 7, new QStandardItem(it->getTitle()));
+                cout++;
+        }
+    }
+
+    if (searchGroup == "学生")
+    {
+        // 设置表格参数
+        ui->search_tableView->setColumnWidth(0, 40);
+        ui->search_tableView->setColumnWidth(1, 100);
+        ui->search_tableView->setColumnWidth(2, 30);
+        ui->search_tableView->setColumnWidth(3, 160);
+        ui->search_tableView->setColumnWidth(4, 30);
+        ui->search_tableView->setColumnWidth(5, 200);
+        ui->search_tableView->setColumnWidth(6, 160);
+    }
+    else
+    {
+        // 行政人员 | 专任教师
+        ui->search_tableView->setColumnWidth(0, 30);
+        ui->search_tableView->setColumnWidth(1, 90);
+        ui->search_tableView->setColumnWidth(2, 20);
+        ui->search_tableView->setColumnWidth(3, 140);
+        ui->search_tableView->setColumnWidth(4, 20);
+        ui->search_tableView->setColumnWidth(5, 130);
+        ui->search_tableView->setColumnWidth(6, 130);
+        ui->search_tableView->setColumnWidth(7, 130);
+    }
+}
+
+/**
+ * 搜索表格右键弹出菜单事件
+ * @brief MainWindow::slotSearchTableViewMenu
+ * @param pos
+ */
+void MainWindow::slotSearchTableViewMenu(QPoint pos)
+{
+    // 鼠标点击位置索引
+    QModelIndex index = ui->search_tableView->indexAt(pos);
+    if (index.isValid())
+    {
+        // 右键数据项有效
+        searchPopMenu->exec(QCursor::pos());
+    }
+}
+
+/**
+ * 搜索页面删除事件槽
+ * @brief MainWindow::slotSearchDelete
+ */
+void MainWindow::slotSearchDelete()
+{
+    // 右键的行索引
+    int row = ui->search_tableView->currentIndex().row();
+    QString group = ui->search_groupComboBox->currentText();
+    QString id;
+    QString name;
+
+    if (group == "行政人员")
+    {
+        // 行政人员
+        AdminTeacher at = searchAdminTeachers[row];
+        id = QString::number(at.getId());
+        name = at.getName();
+    }
+    else if (group == "专任教师")
+    {
+        // 专任教师
+        FullTimeTeacher ftt = searchFullTimeTeachers[row];
+        id = QString::number(ftt.getId());
+        name = ftt.getName();
+    }
+    else if (group == "学生")
+    {
+        // 学生
+        Student student = searchStudents[row];
+        id = QString::number(student.getId());
+        name = student.getName();
+    }
+
+    auto result = QMessageBox::information(this,
+                                           "温馨提示", "确定要删除\"" + name + "\"吗",
+                                           QMessageBox::Yes|QMessageBox::No,
+                                           QMessageBox::No);
+    if (result == QMessageBox::Yes)
+    {
+        try
+        {
+            if (group == "行政人员" || group == "专任教师")
+            {
+                sqlController->deleteTeachert(id);
+            }
+            else if (group == "学生")
+            {
+                sqlController->deleteStudent(id);
+            }
+            // 删除成功，更新数据
+            updateSearch();
+        }
+        catch(SQLException e)
+        {
+            // 删除失败
+            QMessageBox::critical(this, "删除失败", e.message());
+        }
+    }
+}
+// 搜索页面计算平均年龄槽
+void MainWindow::slotSearchCalAvgAge()
+{
+    int sumAge = 0;
+    int avg = 0;
+    if (searchGroup == "学生")
+    {
+        for (auto it = searchStudents.begin(); it != searchStudents.end(); it++)
+        {
+            sumAge += it->getAge();
+        }
+        avg = sumAge / searchStudents.size();
+    }
+    else if (searchGroup == "行政人员")
+    {
+        for (auto it = searchAdminTeachers.begin(); it != searchAdminTeachers.end(); it++)
+        {
+            sumAge += it->getAge();
+        }
+        avg = sumAge / searchAdminTeachers.size();
+    }
+    else if (searchGroup == "专任教师")
+    {
+        for (auto it = searchFullTimeTeachers.begin(); it != searchFullTimeTeachers.end(); it++)
+        {
+            sumAge += it->getAge();
+        }
+        avg = sumAge / searchFullTimeTeachers.size();
+    }
+    QMessageBox::information(this, "温馨提示", "平均年龄是：" + QString::number(avg));
+}
+
+// 搜索页面导出数据槽
+void MainWindow::slotSearchExport()
+{
+    QString dirPath = QFileDialog::getExistingDirectory(this, "选择导出目录", "./", QFileDialog::ShowDirsOnly);
+    if (dirPath.isEmpty())
+        return;
+    try {
+        if (searchGroup == "学生")
+        {
+            dirPath.append("/导出学生搜索数据.txt");
+            myio.writeStudents(searchStudents, dirPath);
+        }
+        else if (searchGroup == "行政人员")
+        {
+            dirPath.append("/导出行政人员搜索数据.txt");
+            myio.writeTeacher(searchAdminTeachers, dirPath);
+        }
+        else if (searchGroup == "专任教师")
+        {
+            dirPath.append("/导出专任教师搜索数据.txt");
+            myio.writeTeacher(searchFullTimeTeachers, dirPath);
+        }
+        QMessageBox::information(this, "导出成功", "数据已经成功导出到\"" + dirPath);
+    } catch (IOException e) {
+        QMessageBox::critical(this, "导出失败", e.message());
+    }
+}

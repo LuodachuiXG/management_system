@@ -241,3 +241,113 @@ void SQLController::deleteTeachert(QString &id)
     sqlite->execute(query);
 }
 
+
+
+/**
+ * 根据姓名获取学生
+ * @brief getStudentByName
+ * @param name
+ * @return
+ */
+vector<Student> SQLController::getStudentByName(QString name)
+{
+    vector<Student> students = getAllStudent();
+    vector<Student> result;
+    for (auto it = students.begin(); it != students.end(); it++)
+    {
+        if (it->getName() == name)
+            result.push_back(*it);
+    }
+    return result;
+}
+
+/**
+ * 根据专业获取学生
+ * @brief SQLController::getStudentByMajor
+ * @param major
+ * @return
+ */
+vector<Student> SQLController::getStudentByMajor(QString major)
+{
+    vector<Student> students = getAllStudent();
+    vector<Student> result;
+    for (auto it = students.begin(); it != students.end(); it++)
+    {
+        if (it->getMajor() == major)
+            result.push_back(*it);
+    }
+    return result;
+}
+
+/**
+ * 根据姓名获取行政人员
+ * @brief SQLController::getAdminTeacherByName
+ * @param name
+ * @return
+ */
+vector<AdminTeacher> SQLController::getAdminTeacherByName(QString name)
+{
+    vector<AdminTeacher> teachers = getAllAdminTeacher();
+    vector<AdminTeacher> result;
+    for (auto it = teachers.begin(); it != teachers.end(); it++)
+    {
+        if (it->getName() == name)
+            result.push_back(*it);
+    }
+    return result;
+}
+
+/**
+ * 根据系部获取行政人员
+ * @brief SQLController::getAdminTeacherByDepartment
+ * @param department
+ * @return
+ */
+vector<AdminTeacher> SQLController::getAdminTeacherByDepartment(QString department)
+{
+    vector<AdminTeacher> teachers = getAllAdminTeacher();
+    vector<AdminTeacher> result;
+    for (auto it = teachers.begin(); it != teachers.end(); it++)
+    {
+        if (it->getDepartment() == department)
+            result.push_back(*it);
+    }
+    return result;
+}
+
+/**
+ * 根据姓名获取专任教师
+ * @brief SQLController::getFullTimeTeacherByName
+ * @param name
+ * @return
+ */
+vector<FullTimeTeacher> SQLController::getFullTimeTeacherByName(QString name)
+{
+    vector<FullTimeTeacher> teachers = getAllFullTimeTeacher();
+    vector<FullTimeTeacher> result;
+    for (auto it = teachers.begin(); it != teachers.end(); it++)
+    {
+        if (it->getName() == name)
+            result.push_back(*it);
+    }
+    return result;
+}
+
+/**
+ * 根据系部获取专任教师
+ * @brief SQLController::getFullTimeTeacherByDepartment
+ * @param department
+ * @return
+ */
+vector<FullTimeTeacher> SQLController::getFullTimeTeacherByDepartment(QString department)
+{
+    vector<FullTimeTeacher> teachers = getAllFullTimeTeacher();
+    vector<FullTimeTeacher> result;
+    for (auto it = teachers.begin(); it != teachers.end(); it++)
+    {
+        if (it->getDepartment() == department)
+            result.push_back(*it);
+    }
+    return result;
+}
+
